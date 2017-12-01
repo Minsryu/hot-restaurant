@@ -58,7 +58,7 @@
                 <input type="text" class="form-control" id="reserve-unique-id">
               </div>
 
-              <button type="submit" class="btn btn-primary submit">Submit</button>
+              <button type="submit" class="btn btn-primary submit" id="add-btn">Submit</button>
             </form>
 
           </div>
@@ -82,5 +82,31 @@
 <!-- BELOW CODE IS CRITICAL. IT HANDLES HOW FORM DATA IS SENT TO OUR SERVER -->
 <script type="text/javascript">
 
+    $("#add-btn").on("click", function(event) {
+      event.preventDefault();
+
+      var newReservation = {
+        name: $("#reserve-name").val().trim(),
+        phoneNumber: $("#reserve-phone").val().trim(),
+        email: $("#reserve-email").val().trim(),
+        uniqueID: $("#reserve-unique-id").val().trim()
+      };
+
+      // Question: Links to server.js POST request.
+      $.post("/api/tables", newReservation)
+      .done(function(data) {
+        console.log(data);
+        alert("Adding reservation...");
+        if (data) {
+            alert("Yay! You made a reservation!");
+        } else {
+            alert("Sorry, you've been waitlisted!");
+        }
+        $("#reserve-name").val("");
+        $("#reserve-phone").val("");
+        $("#reserve-email").val("");
+        $("#reserve-unique-id").val("");
+      });
+    });
 
 </script>
